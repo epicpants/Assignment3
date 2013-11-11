@@ -9,6 +9,8 @@ Purpose:server side of chat room
 #include <iostream>
 #include <pthread.h> 
 #include <cstdlib>
+#include <stdio.h>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/socket.h>  /* define socket */
 #include <netinet/in.h>  /* define internet socket */
@@ -19,14 +21,15 @@ using namespace std;
 
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT];
-int counter = 0;
+//char usernames[MAX_CLIENT][512];
+int counter = -1;
 pthread_mutex_t m;
 
 void runClient(void* arg);
 
 int main()
 {
-  int sd, ns, k, pid;
+  int sd;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
   struct sockaddr_in client_addr = { AF_INET };
   int client_len = sizeof( client_addr );
@@ -35,74 +38,102 @@ int main()
   /* create a stream socket */
   if( ( sd = socket( AF_INET, SOCK_STREAM, 0 ) ) == -1 )
   {
-    perror( "server: socket failed" );
+    cerr << "server: socket failed" << endl;
     exit( 1 );
   }
   
   /* bind the socket to an internet port */
   if( bind(sd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1 )
   {
-    perror( "server: bind failed" );
+    cerr << "server: bind failed" << endl;
     exit( 1 );
   }
 
   /* listen for clients */
   if( listen( sd, MAX_CLIENT-1 ) == -1 )
   {
-    perror( "server: listen failed" );
+    cerr << "server: listen failed" << endl;
     exit( 1 );
   }
 
-  printf("SERVER is listening for clients to establish a connection\n");
+  cout << "SERVER is listening for clients to establish a connection\n" << endl;
 
   int temp;
-  while((temp = accept(d, (struct sockaddr*)&client_addr, &client_len )) > 0)
+  while((temp = accept(sd, (struct sockaddr*)&client_addr, &client_len )) > 0)
   {  
-    lock(m);
+    pthread_mutex_lock(&m);
     FD[counter++] = temp;   
-    unlock(m);
+    pthread_mutex_unlock(&m);
     pthread_t clientThread;
-    pthread_create(&clientThread, NULL, runClient, temp);
+    pthread_create(&clientThread, NULL, runClient, counter);
   }
-
-  close stuff ...
+  
+  
+  //close stuff ...
 
 
  
  return 0;
 }
 
-void runClient(void* arg) 
+void runClient(int* arg) 
 {
   char buf[512], *host;
   int k, ns;
+  int location = *arg;
   
+  string username = "";
   //get  fd;
 
-  //get the host name;
   //read in client name;
-  if( (k = read(ns, buf, sizeof(buf))) == -1)
-  {    
-    cerr << "Server: Read failed" << endl;
-  }
-  while( (k = read(ns, buf, sizeof(buf))) != 0)
+  while((k = read(ns, buf, sizeof(buf))) > 0)
   {   
-    printf("SERVER RECEIVED: %s\n", buf);
+    cout << buf << " joined" << endl;
+    username = buf;
+    //buf = "Welcome " + usernames[location];
+    string welcome = "Welcome ";
+    buf = welcome.c_str();
+    strcat(buf, username);
+    //print a message about the new client;
     write(ns, buf, k);
   }
-  print a message about the new client;
-
-  while ((read(FD, buf)) > 0)
+  
+  //write message to each FD
+  pthread_mutex_lock(&m);
+  //buf = "Client " + usernames[location] + " has joined the chatroom";
+  buf = "Client ";
+  strcat(buf, username);
+  strcat(buf, " has joined the chatroom");
+  for(int i = 0; i < MAX_CLIENT; i++)
   {
-    lock(m)
-    loop
-      write message to each FD
-    unlock(m)          
+    if(i > 0 && i != location)
+    {
+      write(FD[i], buf, k);
+    }
+  }
+  pthread_mutex_unlock(&m);
+    
+  while ((k = read(ns, buf, sizeof(buf))) > 0)
+  {
+    pthread_mutex_lock(&m);
+    //buf = usernames[location] + ": " + buf;
+    string message = buf;
+    buf = username;
+    strcat(buf, ": ");
+    strcat(buf, message);
+    for(int i = 0; i < MAX_CLIENT; i++)
+    {
+      if(i > 0 && i != location)
+      {
+        write(FD[i], buf, k);
+      }
+    }
+      //write message to each FD
+    pthread_mutex_unlock(&m);       
   }
 
-  lock(m);
-  remove myself from FDarray
-  unlock(m) 
-  close(FD)
-  thr_exit()
+  pthread_mutex_lock(&m);
+  FD[location] = 0;
+  pthread_mutex_unlock(&m);
+  pthread_exit(arg);
 }
