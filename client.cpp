@@ -111,9 +111,11 @@ int main(int argc, char* argv[])
 void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
+  
   while ((k = read(clientSocket, buff, sizeof(buff))) > 0)
   {
-    read(clientSocket, buff, sizeof(buff));
+    //read(clientSocket, buff, sizeof(buff));
+    cout<<buff<<endl;
   }
   if(strcmp(buff, code) == 0)
   {
@@ -124,6 +126,6 @@ void* readingOut(void* arg)
     cout<<"Exiting now"<<endl;
     exit(1);
   }
-  cout<<buff<<endl;
+  
   return NULL;
 }
