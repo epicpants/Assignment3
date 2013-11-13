@@ -5,7 +5,7 @@ Class:CS284
 File:client.cpp
 Purpose:client side of chat room
 
-buff[0] = '\0'; asdfasdfasdfasdfafs
+buff[0] = '\0'; strcpy(buff, "");
 */
 
 #include <iostream>
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
-  //buff[0] = '\0';
+  //strcpy(buff, "");
   
   while(exitCondition==false)
   {
@@ -87,9 +87,10 @@ int main(int argc, char* argv[])
     else
     {
       write(clientSocket, buff, sizeof(buff));
-      //buff[0] = '\0';
+      //strcpy(buff, ""); //buff[0] = '\0';
       read(clientSocket, buff, sizeof(buff));
-      //buff[0] = '\0';
+      cout<<buff<<endl;
+      //strcpy(buff, ""); //buff[0] = '\0';
       if(strcmp(buff, code) == 0)
       {
         cout<<"The Server is shutting down"<<endl;
@@ -99,6 +100,7 @@ int main(int argc, char* argv[])
         exit(1);
       }
       cout<<buff<<endl;
+      //strcpy(buff, "");
     }
   }
   
