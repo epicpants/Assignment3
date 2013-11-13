@@ -20,6 +20,11 @@ buff[0] = '\0'; strcpy(buff, "");
 
 using namespace std;
 
+int clientSocket;
+char buff[1024];
+char code[]="bRZUkq3h173Uc31";
+bool exitCondition=false;
+
 void signalHandler(int signalNumber)
 {
   if(signalNumber==2)
@@ -29,16 +34,15 @@ void signalHandler(int signalNumber)
   
 }
 
+void * readingOut(void* arg);
+
 int main(int argc, char* argv[])
 {
   signal(SIGINT, signalHandler);
-  int clientSocket;
-  bool exitCondition=false;
-  char buff[1024];
+  pthread_mutex_t m;
   char quit[]="/quit";
   char exitb[]="/exit";
   char part[]="/part";
-  char code[]="bRZUkq3h173Uc31";
   string stupidStringVar;
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
@@ -73,6 +77,9 @@ int main(int argc, char* argv[])
     exit(1);
   }
   
+  pthread_t readThread;
+  pthread_create(&readThread, NULL, readingOut, &clientSocket); 
+  
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
@@ -93,20 +100,25 @@ int main(int argc, char* argv[])
     else
     {
       write(clientSocket, buff, sizeof(buff));
-      read(clientSocket, buff, sizeof(buff));
-      if(strcmp(buff, code) == 0)
-      {
-        exitCondition=true;
-        cout<<"The Server is shutting down"<<endl;
-        cout<<"This program will terminate in 10 seconds"<<endl;
-        sleep(10000);
-        cout<<"Exiting now"<<endl;
-        exit(1);
-      }
-      cout<<buff<<endl;
     }
   }
   
   close(clientSocket);
   return 0;
+}
+
+void* readingOut(void* arg)
+{
+  read(clientSocket, buff, sizeof(buff));
+  if(strcmp(buff, code) == 0)
+  {
+    exitCondition=true;
+    cout<<"The Server is shutting down"<<endl;
+    cout<<"This program will terminate in 10 seconds"<<endl;
+    sleep(10000);
+    cout<<"Exiting now"<<endl;
+    exit(1);
+  }
+  cout<<buff<<endl;
+  return NULL;
 }
