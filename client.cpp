@@ -84,6 +84,13 @@ int main(int argc, char* argv[])
     {
       write(clientSocket, buff, sizeof(buff));
       read(clientSocket, buff, sizeof(buff));
+      if(strcmp(buff, code) == 0)
+      {
+        cout<<"The Server is shutting down"<<endl;
+        cout<<"This program will terminate in 10 seconds"<<endl;
+        sleep(10000);
+        exit(1);
+      }
       cout<<buff<<endl;
     }
   }
