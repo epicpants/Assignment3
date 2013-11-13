@@ -115,17 +115,18 @@ void* readingOut(void* arg)
   while ((k = read(clientSocket, buff, sizeof(buff))) > 0)
   {
     //read(clientSocket, buff, sizeof(buff));
+    if(strcmp(buff, code) == 0)
+    {
+      exitCondition=true;
+      cout<<"The Server is shutting down"<<endl;
+      cout<<"This program will terminate in 10 seconds"<<endl;
+      sleep(10000);
+      cout<<"Exiting now"<<endl;
+      exit(1);
+    } 
     cout<<buff<<endl;
   }
-  if(strcmp(buff, code) == 0)
-  {
-    exitCondition=true;
-    cout<<"The Server is shutting down"<<endl;
-    cout<<"This program will terminate in 10 seconds"<<endl;
-    sleep(10000);
-    cout<<"Exiting now"<<endl;
-    exit(1);
-  }
+  
   
   return NULL;
 }
