@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
   char quit[]="/quit";
   char exitb[]="/exit";
   char part[]="/part";
+  char code[]="bRZUkq3h173Uc31";
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
 
