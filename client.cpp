@@ -79,6 +79,7 @@ int main(int argc, char* argv[])
   
   while(exitCondition==false)
   {
+    cin>>buff;
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
       exitCondition=true;
@@ -86,6 +87,7 @@ int main(int argc, char* argv[])
     }
     else
     {
+      cin>>buff;
       write(clientSocket, buff, sizeof(buff));
       //strcpy(buff, ""); //buff[0] = '\0';
       read(clientSocket, buff, sizeof(buff));
@@ -93,6 +95,7 @@ int main(int argc, char* argv[])
       //strcpy(buff, ""); //buff[0] = '\0';
       if(strcmp(buff, code) == 0)
       {
+        exitCondition=true;
         cout<<"The Server is shutting down"<<endl;
         cout<<"This program will terminate in 10 seconds"<<endl;
         sleep(10000);
