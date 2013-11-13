@@ -22,17 +22,17 @@ using namespace std;
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT];
 //char usernames[MAX_CLIENT][512];
-int counter = -1;
+long counter = -1;
 pthread_mutex_t m;
 
-void runClient(void* arg);
+void* runClient(void* arg);
 
 int main()
 {
   int sd;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
   struct sockaddr_in client_addr = { AF_INET };
-  int client_len = sizeof( client_addr );
+  unsigned int client_len = sizeof( client_addr );
   
 
   /* create a stream socket */
@@ -65,7 +65,7 @@ int main()
     FD[counter++] = temp;   
     pthread_mutex_unlock(&m);
     pthread_t clientThread;
-    pthread_create(&clientThread, NULL, runClient, counter);
+    pthread_create(&clientThread, NULL, runClient, (void*) counter);
   }
   
   
@@ -76,56 +76,63 @@ int main()
  return 0;
 }
 
-void runClient(int* arg) 
+void* runClient(void* arg) 
 {
-  char buf[512], *host;
+  char buffer[512];
   int k, ns;
-  int location = *arg;
+  long location;
+  location = (long)arg;
   
-  string username = "";
+  char username[500];
+  char message[1024];
   //get  fd;
 
   //read in client name;
-  while((k = read(ns, buf, sizeof(buf))) > 0)
+  while((k = read(ns, buffer, sizeof(buffer))) > 0)
   {   
-    cout << buf << " joined" << endl;
-    username = buf;
-    //buf = "Welcome " + usernames[location];
-    string welcome = "Welcome ";
-    buf = welcome.c_str();
-    strcat(buf, username);
+    cout << buffer << " joined" << endl;
+    strcpy(username, buffer);
+    //buffer = "Welcome " + usernames[location];
+    //string welcome = "Welcome ";
+    
+    //buffer = welcome.c_str();
+    strcat(message, "Welcome ");
+    strcat(message, username);
+    
     //print a message about the new client;
-    write(ns, buf, k);
+    write(ns, message, sizeof(message));
   }
   
   //write message to each FD
   pthread_mutex_lock(&m);
-  //buf = "Client " + usernames[location] + " has joined the chatroom";
-  buf = "Client ";
-  strcat(buf, username);
-  strcat(buf, " has joined the chatroom");
+  //buffer = "Client " + usernames[location] + " has joined the chatroom";
+  //buffer = "Client ";
+  strcpy(message, "Client ");
+  strcat(message, username);
+  strcat(message, " has joined the chatroom");
   for(int i = 0; i < MAX_CLIENT; i++)
   {
     if(i > 0 && i != location)
     {
-      write(FD[i], buf, k);
+      write(FD[i], message, sizeof(message));
     }
   }
   pthread_mutex_unlock(&m);
     
-  while ((k = read(ns, buf, sizeof(buf))) > 0)
+  while ((k = read(ns, buffer, sizeof(buffer))) > 0)
   {
     pthread_mutex_lock(&m);
-    //buf = usernames[location] + ": " + buf;
-    string message = buf;
-    buf = username;
-    strcat(buf, ": ");
-    strcat(buf, message);
+    //buffer = usernames[location] + ": " + buffer;
+    //string message = buffer;
+    strcpy(message, username);
+    //buffer = username;
+    strcat(message, ": ");
+    strcat(message, buffer);
     for(int i = 0; i < MAX_CLIENT; i++)
     {
       if(i > 0 && i != location)
       {
-        write(FD[i], buf, k);
+        write(FD[i], message, sizeof(message));
       }
     }
       //write message to each FD
@@ -136,4 +143,5 @@ void runClient(int* arg)
   FD[location] = 0;
   pthread_mutex_unlock(&m);
   pthread_exit(arg);
+  return NULL;
 }
