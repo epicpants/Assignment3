@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   signal(SIGINT, signalHandler);
   int clientSocket;
   bool exitCondition=false;
-  char buff[512];
+  char buff[1024];
   char quit[]="/quit";
   char exitb[]="/exit";
   char part[]="/part";
