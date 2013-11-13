@@ -89,10 +89,7 @@ int main(int argc, char* argv[])
     {
       //cin>>buff;
       write(clientSocket, buff, sizeof(buff));
-      //strcpy(buff, ""); //buff[0] = '\0';
       read(clientSocket, buff, sizeof(buff));
-      cout<<buff<<endl;
-      //strcpy(buff, ""); //buff[0] = '\0';
       if(strcmp(buff, code) == 0)
       {
         exitCondition=true;
@@ -103,7 +100,6 @@ int main(int argc, char* argv[])
         exit(1);
       }
       cout<<buff<<endl;
-      //strcpy(buff, "");
     }
   }
   
