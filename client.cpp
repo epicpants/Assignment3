@@ -5,7 +5,7 @@ Class:CS284
 File:client.cpp
 Purpose:client side of chat room
 
-buff[0] = '\0';
+buff[0] = '\0'; asdfasdfasdfasdfafs
 */
 
 #include <iostream>
