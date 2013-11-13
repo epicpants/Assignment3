@@ -75,6 +75,7 @@ int main(int argc, char* argv[])
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
+  write(clientSocket, buff, sizeof(buff));
   //strcpy(buff, "");
   
   while(exitCondition==false)
@@ -86,7 +87,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-      cin>>buff;
+      //cin>>buff;
       write(clientSocket, buff, sizeof(buff));
       //strcpy(buff, ""); //buff[0] = '\0';
       read(clientSocket, buff, sizeof(buff));
