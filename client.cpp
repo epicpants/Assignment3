@@ -89,6 +89,7 @@ int main(int argc, char* argv[])
         cout<<"The Server is shutting down"<<endl;
         cout<<"This program will terminate in 10 seconds"<<endl;
         sleep(10000);
+        cout<<"Exiting now"<<endl;
         exit(1);
       }
       cout<<buff<<endl;
