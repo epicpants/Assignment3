@@ -56,7 +56,7 @@ int main()
     exit( 1 );
   }
 
-  cout << "SERVER is listening for clients to establish a connection\n" << endl;
+  cout << "SERVER is listening for clients to establish a connection\n";
 
   int temp;
   while((temp = accept(sd, (struct sockaddr*)&client_addr, &client_len )) > 0)
