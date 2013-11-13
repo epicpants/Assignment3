@@ -4,6 +4,8 @@ Date:2013.11.12
 Class:CS284
 File:client.cpp
 Purpose:client side of chat room
+
+buff[0] = '\0';
 */
 
 #include <iostream>
@@ -73,6 +75,7 @@ int main(int argc, char* argv[])
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
+  //buff[0] = '\0';
   
   while(exitCondition==false)
   {
@@ -84,7 +87,9 @@ int main(int argc, char* argv[])
     else
     {
       write(clientSocket, buff, sizeof(buff));
+      //buff[0] = '\0';
       read(clientSocket, buff, sizeof(buff));
+      //buff[0] = '\0';
       if(strcmp(buff, code) == 0)
       {
         cout<<"The Server is shutting down"<<endl;
