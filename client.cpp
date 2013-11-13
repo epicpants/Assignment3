@@ -21,6 +21,7 @@ buff[0] = '\0'; strcpy(buff, "");
 using namespace std;
 
 int clientSocket;
+int k;
 char buff[1024];
 char code[]="bRZUkq3h173Uc31";
 bool exitCondition=false;
@@ -110,7 +111,10 @@ int main(int argc, char* argv[])
 void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
-  read(clientSocket, buff, sizeof(buff));
+  while ((k = read(clientSocket, buff, sizeof(buff))) > 0)
+  {
+    read(clientSocket, buff, sizeof(buff));
+  }
   if(strcmp(buff, code) == 0)
   {
     exitCondition=true;
