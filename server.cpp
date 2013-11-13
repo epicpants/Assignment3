@@ -8,6 +8,7 @@ Purpose:server side of chat room
 
 #include <iostream>
 #include <pthread.h> 
+#include <signal.h>
 #include <cstdlib>
 #include <stdio.h>
 #include <cstring>
@@ -21,17 +22,26 @@ using namespace std;
 
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT];
-int counter = -1;
+int counter = 0;
 pthread_mutex_t m;
 
 void* runClient(void* arg);
 
+/*
+void signalHandler(int sig)
+{
+  cout << "Ctrl-C detected. Server will shut down in 10 seconds..." << endl;
+  
+  
+}
+*/
 int main()
 {
   int sd;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
   struct sockaddr_in client_addr = { AF_INET };
   unsigned int client_len = sizeof( client_addr );
+  //signal(SIGINT, signalHandler);
   
   for(int i = 0; i < MAX_CLIENT; i++)
   {
@@ -107,7 +117,6 @@ void* runClient(void* arg)
     
     strcat(message, "Welcome ");
     strcat(message, username);
-    
     //print a message about the new client;
     write(skt, message, sizeof(message));
   }
