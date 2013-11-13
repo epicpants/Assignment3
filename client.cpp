@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
   char exitb[]="/exit";
   char part[]="/part";
   char code[]="bRZUkq3h173Uc31";
+  string stupidStringVar;
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
 
@@ -81,7 +82,9 @@ int main(int argc, char* argv[])
   
   while(exitCondition==false)
   {
-    cin>>buff;
+    getline(cin, stupidStringVar);
+    strcpy(buff, stupidStringVar.c_str());
+    
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
       exitCondition=true;
