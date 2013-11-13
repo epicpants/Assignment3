@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
 
 void* readingOut(void* arg)
 {
+  int clientSocket = *(int *)arg;
   read(clientSocket, buff, sizeof(buff));
   if(strcmp(buff, code) == 0)
   {
