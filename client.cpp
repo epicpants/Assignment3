@@ -79,7 +79,6 @@ int main(int argc, char* argv[])
   
   while(exitCondition==false)
   {
-    cin>>buff;
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
       exitCondition=true;
