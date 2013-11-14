@@ -98,6 +98,7 @@ int main(int argc, char* argv[])
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
       exitCondition=true;
+      cout << "Exitted!!!" << endl;
       exit(1);
     }
     else
@@ -121,9 +122,9 @@ void* readingOut(void* arg)
     {
       exitCondition=true;
       cout<<"The Server is shutting down"<<endl;
-      cout<<"This program will terminate in 10 seconds"<<endl;
-      sleep(10);
-      cout<<"Exiting now"<<endl;
+      cout<<"This program will now terminate"<<endl;
+      sleep(1);
+      cout<<"Exitted!!!"<<endl;
       exit(1);
     } 
     cout<<buffer<<endl;
