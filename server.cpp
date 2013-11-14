@@ -25,6 +25,7 @@ int FD[MAX_CLIENT];
 char usernames[MAX_CLIENT][500];
 int counter = 0;
 int numClients = 0;
+int sd;
 pthread_mutex_t m;
 
 void* runClient(void* arg);
@@ -45,12 +46,13 @@ void signalHandler(int sig)
   }
   
   cout << "Server has exitted!!!" << endl;
+  close(sd);
   exit(1);
 }
 
 int main()
 {
-  int sd;
+  
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
   struct sockaddr_in client_addr = { AF_INET };
   unsigned int client_len = sizeof( client_addr );
