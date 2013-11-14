@@ -22,6 +22,7 @@ using namespace std;
 
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT];
+char usernames[MAX_CLIENT][500];
 int counter = 0;
 int numClients = 0;
 pthread_mutex_t m;
@@ -33,13 +34,17 @@ void signalHandler(int sig)
   cout << "  Ctrl-C detected. Server will shut down in 10 seconds..." << endl;
   sleep(10);
   char code[]="bRZUkq3h173Uc31";
+  
   for(int i = 0; i < MAX_CLIENT; i++)
   {
     if(FD[i] > 0)
     {
+      cout << usernames[i] << " has left" << endl;
       write(FD[i], code, sizeof(code));
     }
   }
+  
+  cout << "Server has exitted!!!" << endl;
   exit(1);
 }
 
@@ -167,6 +172,9 @@ void* runClient(void* arg)
   strcpy(message, "Client ");
   strcat(message, username);
   strcat(message, " has joined the chatroom");
+  
+  strcpy(usernames[location], username);
+ 
   
   for(int i = 0; i < MAX_CLIENT; i++)
   {
