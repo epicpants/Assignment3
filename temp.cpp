@@ -117,8 +117,8 @@ void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
   
-   //while (( k = (recv(clientSocket, buffer, sizeof(buffer), NULL))) > 0)
-  while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
+  //while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
+  while (( k = (recv(clientSocket, buffer, sizeof(buffer), NULL))) > 0)
   {
     //read(clientSocket, buffer, sizeof(buffer));
     if(strcmp(buffer, code) == 0)
