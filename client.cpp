@@ -121,7 +121,7 @@ void* readingOut(void* arg)
       exitCondition=true;
       cout<<"The Server is shutting down"<<endl;
       cout<<"This program will terminate in 10 seconds"<<endl;
-      sleep(10000);
+      sleep(10);
       cout<<"Exiting now"<<endl;
       exit(1);
     } 
