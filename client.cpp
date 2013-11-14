@@ -113,10 +113,10 @@ void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
   
-  while ((k = read(clientSocket, buff, sizeof(buff))) > 0)
+  while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   {
-    //read(clientSocket, buff, sizeof(buff));
-    if(strcmp(buff, code) == 0)
+    //read(clientSocket, buffer, sizeof(buffer));
+    if(strcmp(buffer, code) == 0)
     {
       exitCondition=true;
       cout<<"The Server is shutting down"<<endl;
@@ -125,7 +125,7 @@ void* readingOut(void* arg)
       cout<<"Exiting now"<<endl;
       exit(1);
     } 
-    cout<<buff<<endl;
+    cout<<buffer<<endl;
   }
   
   
