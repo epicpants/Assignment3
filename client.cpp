@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
   pthread_create(&readThread, NULL, readingOut, &clientSocket); 
   
    //strcpy(buff, "");
+   cin.ignore(1000, '\n');
   while(exitCondition==false)
   { 
     cout<<">>";
