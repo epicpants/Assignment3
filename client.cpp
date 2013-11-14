@@ -123,7 +123,7 @@ void* readingOut(void* arg)
       cout<<"The Server is shutting down"<<endl;
       cout<<"This program will now terminate"<<endl;
       sleep(1);
-      cout<<"Exited!!!"<<endl;
+      cout<<"Exitted!!!"<<endl;
       exit(1);
     } 
     cout<<buffer<<endl;
