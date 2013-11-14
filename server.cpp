@@ -23,10 +23,10 @@ using namespace std;
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT];
 int counter = 0;
+int numClients = 0;
 pthread_mutex_t m;
 
 void* runClient(void* arg);
-
 
 void signalHandler(int sig)
 {
@@ -81,11 +81,44 @@ int main()
   int temp;
   while((temp = accept(sd, (struct sockaddr*)&client_addr, &client_len )) > 0)
   {  
-    pthread_mutex_lock(&m);
-    FD[counter++] = temp;   
-    pthread_mutex_unlock(&m);
-    pthread_t clientThread;
-    pthread_create(&clientThread, NULL, runClient, &temp);
+    if(numClients < MAX_CLIENT && FD[counter] == 0)
+    {
+      pthread_mutex_lock(&m);
+      FD[counter++] = temp;
+      counter = counter % MAX_CLIENT;
+      numClients++;
+      if(numClients < MAX_CLIENT)
+      {
+        while(FD[counter] != 0)
+        {
+          counter = (counter + 1)%MAX_CLIENT;
+        }
+      }
+      pthread_mutex_unlock(&m);
+      pthread_t clientThread;
+      pthread_create(&clientThread, NULL, runClient, &temp);
+    }
+    else if(numClients < MAX_CLIENT)
+    {
+      pthread_mutex_lock(&m);
+      while(FD[counter] != 0)
+      {
+        counter = (counter + 1)%MAX_CLIENT;
+      }
+      FD[counter++] = temp;
+      counter = counter % MAX_CLIENT;
+      numClients++;
+      if(numClients < MAX_CLIENT)
+      {
+        while(FD[counter] != 0)
+        {
+          counter = (counter + 1)%MAX_CLIENT;
+        }
+      }
+      pthread_mutex_unlock(&m);
+      pthread_t clientThread;
+      pthread_create(&clientThread, NULL, runClient, &temp);
+    }
   }
   
   
@@ -150,7 +183,6 @@ void* runClient(void* arg)
     strcpy(message, username);
     strcat(message, ": ");
     strcat(message, buffer);
-    //cout << "I was called" << endl;
     for(int i = 0; i < MAX_CLIENT; i++)
     {
       if(FD[i] > 0 && FD[i] != skt)
@@ -164,7 +196,8 @@ void* runClient(void* arg)
 
   pthread_mutex_lock(&m);
   FD[location] = 0;
-  cout << "He died" << endl;
+  cout << username << " has left" << endl;
+  numClients--;
   pthread_mutex_unlock(&m);
   pthread_exit(arg);
   return NULL;
