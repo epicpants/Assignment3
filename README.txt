@@ -1,5 +1,5 @@
 Authors: Tyler Ryan and Chris Rawlings
-to compile: 
+to compile:use the following commands 
 g++ -pthread server.cpp -o server
 g++ -pthread client.cpp -o client
 
