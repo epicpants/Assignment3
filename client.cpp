@@ -113,7 +113,9 @@ void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
   
-  while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
+  while(1)
+  {
+  if((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   {
     //read(clientSocket, buffer, sizeof(buffer));
     if(strcmp(buffer, code) == 0)
@@ -126,6 +128,7 @@ void* readingOut(void* arg)
       exit(1);
     } 
     cout<<buffer<<endl;
+  }
   }
   
   
