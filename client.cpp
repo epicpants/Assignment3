@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
   
    //strcpy(buff, "");
   while(exitCondition==false)
-  {
+  { 
     cout<<">>";
     getline(cin, stupidStringVar);
     strcpy(buff, stupidStringVar.c_str());
