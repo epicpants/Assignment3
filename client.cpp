@@ -79,15 +79,14 @@ int main(int argc, char* argv[])
     exit(1);
   }
   
-  pthread_t readThread;
-  pthread_create(&readThread, NULL, readingOut, &clientSocket); 
-  
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
   write(clientSocket, buff, sizeof(buff));
   read(clientSocket, buff, sizeof(buff));
 
+  pthread_t readThread;
+  pthread_create(&readThread, NULL, readingOut, &clientSocket); 
   
   while(exitCondition==false)
   {
