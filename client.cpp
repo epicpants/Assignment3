@@ -84,6 +84,7 @@ int main(int argc, char* argv[])
   cin>>buff;
   write(clientSocket, buff, sizeof(buff));
   read(clientSocket, buff, sizeof(buff));
+  cout << buff << endl;
 
   pthread_t readThread;
   pthread_create(&readThread, NULL, readingOut, &clientSocket); 
