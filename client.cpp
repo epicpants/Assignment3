@@ -82,6 +82,7 @@ int main(int argc, char* argv[])
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
+  strcpy(buff, "");
   write(clientSocket, buff, sizeof(buff));
   read(clientSocket, buff, sizeof(buff));
   cout << buff << endl;
