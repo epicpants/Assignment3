@@ -119,13 +119,13 @@ int main()
       pthread_t clientThread;
       pthread_create(&clientThread, NULL, runClient, &temp);
     }
+    else
+    {
+      char error[] = "The max number of users are currently in the chatroom. Please try later\n";
+      write(temp, error, sizeof(error));
+    }
   }
   
-  
-  //close stuff ...
-
-
- 
  return 0;
 }
 
