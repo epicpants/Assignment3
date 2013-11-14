@@ -27,21 +27,29 @@ pthread_mutex_t m;
 
 void* runClient(void* arg);
 
-/*
+
 void signalHandler(int sig)
 {
-  cout << "Ctrl-C detected. Server will shut down in 10 seconds..." << endl;
-  
-  
+  cout << "  Ctrl-C detected. Server will shut down in 10 seconds..." << endl;
+  sleep(10);
+  char code[]="bRZUkq3h173Uc31";
+  for(int i = 0; i < MAX_CLIENT; i++)
+  {
+    if(FD[i] > 0)
+    {
+      write(FD[i], code, sizeof(code));
+    }
+  }
+  exit(1);
 }
-*/
+
 int main()
 {
   int sd;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
   struct sockaddr_in client_addr = { AF_INET };
   unsigned int client_len = sizeof( client_addr );
-  //signal(SIGINT, signalHandler);
+  signal(SIGINT, signalHandler);
   
   for(int i = 0; i < MAX_CLIENT; i++)
   {
@@ -142,6 +150,7 @@ void* runClient(void* arg)
     strcpy(message, username);
     strcat(message, ": ");
     strcat(message, buffer);
+    //cout << "I was called" << endl;
     for(int i = 0; i < MAX_CLIENT; i++)
     {
       if(FD[i] > 0 && FD[i] != skt)
