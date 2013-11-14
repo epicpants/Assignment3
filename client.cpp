@@ -23,6 +23,7 @@ using namespace std;
 int clientSocket;
 int k;
 char buff[1024];
+char buffer[1024];
 char code[]="bRZUkq3h173Uc31";
 bool exitCondition=false;
 
