@@ -4,8 +4,6 @@ Date:2013.11.12
 Class:CS284
 File:client.cpp
 Purpose:client side of chat room
-
-buff[0] = '\0'; strcpy(buff, "");
 */
 
 #include <iostream>
@@ -33,7 +31,6 @@ void signalHandler(int signalNumber)
   {
     cout<<"To exit type /quit /exit or /part"<<endl;
   }
-  
 }
 
 void * readingOut(void* arg);
@@ -78,6 +75,7 @@ int main(int argc, char* argv[])
     exit(1);
   }
   
+  //get username from user
   cout<<"Connection Successful"<<endl;
   cout<<"Enter Username: ";
   cin>>buff;
@@ -85,15 +83,16 @@ int main(int argc, char* argv[])
   read(clientSocket, buff, sizeof(buff));
   cout << buff << endl;
 
+  //create thread for handling simultaneous input & output
   pthread_t readThread;
   pthread_create(&readThread, NULL, readingOut, &clientSocket);
   
    cin.ignore(1000, '\n');
    
+   //output to server
   while(exitCondition==false)
   {
     string stupidStringVar="";
-    //cout<<">>";
     getline(cin, stupidStringVar);
     strcpy(buff, stupidStringVar.c_str());
     
@@ -106,7 +105,6 @@ int main(int argc, char* argv[])
     else
     {
       write(clientSocket, buff, stupidStringVar.size()*8);
-      //cout<<sizeof(buff)<<endl;
     }
   }
   
@@ -114,14 +112,13 @@ int main(int argc, char* argv[])
   return 0;
 }
 
+//input from server
 void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
   
-  //while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   {
-    //read(clientSocket, buffer, sizeof(buffer));
     if(strcmp(buffer, code) == 0)
     {
       exitCondition=true;
@@ -131,9 +128,7 @@ void* readingOut(void* arg)
       exit(1);
     }
     cout<<buffer<<endl;
-    //cout<<buffer<<"\n>>";
   }
-  
   
   return NULL;
 }
