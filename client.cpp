@@ -132,6 +132,7 @@ void* readingOut(void* arg)
       exit(1);
     } 
     cout<<buffer<<endl;
+    cout<<">>";
   }
   
   
