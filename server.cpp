@@ -32,7 +32,7 @@ void* runClient(void* arg);
 
 void signalHandler(int sig)
 {
-  cout << "  Ctrl-C detected. Server will shut down in 10 seconds..." << endl;
+  cout << "  Ctrl-C detected. SERVER will shut down in 10 seconds..." << endl;
   sleep(10);
   char code[]="bRZUkq3h173Uc31";
   
@@ -45,7 +45,7 @@ void signalHandler(int sig)
     }
   }
   
-  cout << "Server has exitted!!!" << endl;
+  cout << "SERVER has exitted!!!" << endl;
   close(sd);
   exit(1);
 }
@@ -65,21 +65,21 @@ int main()
   /* create a stream socket */
   if( ( sd = socket( AF_INET, SOCK_STREAM, 0 ) ) == -1 )
   {
-    cerr << "server: socket failed" << endl;
+    cerr << "SERVER: socket failed" << endl;
     exit( 1 );
   }
   
   /* bind the socket to an internet port */
   if( bind(sd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1 )
   {
-    cerr << "server: bind failed" << endl;
+    cerr << "SERVER: bind failed" << endl;
     exit( 1 );
   }
 
   /* listen for clients */
   if( listen( sd, MAX_CLIENT-1 ) == -1 )
   {
-    cerr << "server: listen failed" << endl;
+    cerr << "SERVER: listen failed" << endl;
     exit( 1 );
   }
 
@@ -140,7 +140,7 @@ void* runClient(void* arg)
 {
   if(arg == NULL)
   {
-    cerr << "Oh no! Null argument" << endl; // TODO: Make professional
+    cerr << "Thread received null argument" << endl;
   }
   
   char buffer[512];
