@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-      write(clientSocket, buff, sizeof(buff));
+      write(clientSocket, buff, stupidStringVar.size());
     }
   }
   
