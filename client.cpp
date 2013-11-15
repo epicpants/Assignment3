@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
   char exitb[]="/exit";
   char part[]="/part";
   string stupidStringVar;
+  string stupiderStringVar;
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
 
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-      write(clientSocket, buff, sizeof(buff));
+      write(clientSocket, buff, (stupidStringVar.size()));
     }
   }
   
