@@ -1,6 +1,6 @@
 /*
 Authors:Chris Rawlings and Tyler Ryan  
-Date:2013.11.12
+Date:2013.11.14
 Class:CS284
 File:server.cpp
 Purpose:server side of chat room
@@ -30,16 +30,17 @@ pthread_mutex_t m;
 
 void* runClient(void* arg);
 
+// Interrupt handler for Cntl-C
 void signalHandler(int sig)
 {
   cout << "  Ctrl-C detected. SERVER will shut down in 10 seconds..." << endl;
   char warning[] = "WARNING: SERVER will shut down in 10 seconds";
   
+  // Warn the clients
   for(int i = 0; i < MAX_CLIENT; i++)
   {
     if(FD[i] > 0)
     {
-      
       write(FD[i], warning, sizeof(warning));
     }
   }
@@ -47,7 +48,7 @@ void signalHandler(int sig)
   sleep(10);
   char code[]="bRZUkq3h173Uc31";
   
-  
+  // Kick the clients
   for(int i = 0; i < MAX_CLIENT; i++)
   {
     if(FD[i] > 0)
@@ -56,7 +57,6 @@ void signalHandler(int sig)
       write(FD[i], code, sizeof(code));
     }
   }
-  
   
   cout << "SERVER has exited!!!" << endl;
   close(sd);
@@ -192,7 +192,6 @@ void* runClient(void* arg)
   
   strcpy(usernames[location], username);
  
-  
   for(int i = 0; i < MAX_CLIENT; i++)
   {
     if(FD[i] > 0 && FD[i] != skt)
