@@ -45,7 +45,6 @@ int main(int argc, char* argv[])
   char quit[]="/quit";
   char exitb[]="/exit";
   char part[]="/part";
-  string stupidStringVar;
   string stupiderStringVar;
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
@@ -94,9 +93,11 @@ int main(int argc, char* argv[])
    
   while(exitCondition==false)
   { 
+    string stupidStringVar;
     cout<<">>";
     getline(cin, stupidStringVar);
     strcpy(buff, stupidStringVar.c_str());
+    
     
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
@@ -109,6 +110,7 @@ int main(int argc, char* argv[])
       write(clientSocket, buff, (stupidStringVar.size()));
     }
   }
+  strcpy(buff, "");
   
   close(clientSocket);
   return 0;
@@ -132,7 +134,7 @@ void* readingOut(void* arg)
       exit(1);
     } 
     cout<<buffer<<endl;
-    cout<<">>";
+    //cout<<">>";
   }
   
   
