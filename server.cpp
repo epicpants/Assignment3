@@ -33,8 +33,20 @@ void* runClient(void* arg);
 void signalHandler(int sig)
 {
   cout << "  Ctrl-C detected. SERVER will shut down in 10 seconds..." << endl;
+  char warning[] = "WARNING: SERVER will shut down in 10 seconds";
+  
+  for(int i = 0; i < MAX_CLIENT; i++)
+  {
+    if(FD[i] > 0)
+    {
+      
+      write(FD[i], warning, sizeof(warning));
+    }
+  }
+  
   sleep(10);
   char code[]="bRZUkq3h173Uc31";
+  
   
   for(int i = 0; i < MAX_CLIENT; i++)
   {
@@ -45,7 +57,8 @@ void signalHandler(int sig)
     }
   }
   
-  cout << "SERVER has exitted!!!" << endl;
+  
+  cout << "SERVER has exited!!!" << endl;
   close(sd);
   exit(1);
 }
@@ -88,6 +101,7 @@ int main()
   int temp;
   while((temp = accept(sd, (struct sockaddr*)&client_addr, &client_len )) > 0)
   {  
+    // Check for max number of clients
     if(numClients < MAX_CLIENT && FD[counter] == 0)
     {
       pthread_mutex_lock(&m);
@@ -136,6 +150,7 @@ int main()
  return 0;
 }
 
+// Thread for each client connection
 void* runClient(void* arg) 
 {
   if(arg == NULL)
@@ -193,6 +208,7 @@ void* runClient(void* arg)
     strcpy(message, username);
     strcat(message, ": ");
     strcat(message, buffer);
+    //write message to each FD
     for(int i = 0; i < MAX_CLIENT; i++)
     {
       if(FD[i] > 0 && FD[i] != skt)
@@ -200,11 +216,11 @@ void* runClient(void* arg)
         write(FD[i], message, sizeof(message));
       }
     }
-      //write message to each FD
     pthread_mutex_unlock(&m);       
   }
 
   pthread_mutex_lock(&m);
+  close(FD[location]);
   FD[location] = 0;
   cout << username << " has left" << endl;
   numClients--;

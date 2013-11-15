@@ -93,14 +93,14 @@ int main(int argc, char* argv[])
   while(exitCondition==false)
   {
     string stupidStringVar="";
-    cout<<">>";
+    //cout<<">>";
     getline(cin, stupidStringVar);
     strcpy(buff, stupidStringVar.c_str());
     
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
       exitCondition=true;
-      cout << "Exitted!!!" << endl;
+      cout << "Exited!!!" << endl;
       exit(1);
     }
     else
@@ -125,13 +125,13 @@ void* readingOut(void* arg)
     if(strcmp(buffer, code) == 0)
     {
       exitCondition=true;
-      cout<<"The Server is shutting down"<<endl;
       cout<<"This program will now terminate"<<endl;
       sleep(1);
-      cout<<"Exitted!!!"<<endl;
+      cout<<"Exited!!!"<<endl;
       exit(1);
     }
     cout<<buffer<<endl;
+    //cout<<buffer<<"\n>>";
   }
   
   
