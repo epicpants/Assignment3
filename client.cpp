@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
   char quit[]="/quit";
   char exitb[]="/exit";
   char part[]="/part";
-  string stupiderStringVar;
+  string stupidStringVar;
   struct hostent *hostServer;
   struct sockaddr_in server_addr = { AF_INET, htons( SERVER_PORT ) };
 
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
   
   memcpy( hostServer->h_addr_list[0], (char*)&server_addr.sin_addr, hostServer->h_length );
     
-  //creating a socket for the  client
+  //creating a socket for the client
   if( (clientSocket=socket(AF_INET, SOCK_STREAM, 0)) == -1)
   {
     cout<<"Socket Creation Failure"<<endl;
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
   }
   
   //client connecting to a socket
-  if( (connect( clientSocket,(struct sockaddr*)&server_addr, sizeof(server_addr))) == -1) 
+  if( (connect( clientSocket,(struct sockaddr*)&server_addr, sizeof(server_addr))) == -1)
   {
     cout<<"Connection Failed"<<endl;
     exit(1);
@@ -87,17 +87,15 @@ int main(int argc, char* argv[])
   cout << buff << endl;
 
   pthread_t readThread;
-  pthread_create(&readThread, NULL, readingOut, &clientSocket); 
+  pthread_create(&readThread, NULL, readingOut, &clientSocket);
   
    cin.ignore(1000, '\n');
    
   while(exitCondition==false)
-  { 
-    string stupidStringVar;
+  {
     cout<<">>";
     getline(cin, stupidStringVar);
     strcpy(buff, stupidStringVar.c_str());
-    
     
     if(strcmp(buff, quit)==0 || strcmp(buff, exitb)==0 || strcmp(buff, part)==0)
     {
@@ -107,10 +105,9 @@ int main(int argc, char* argv[])
     }
     else
     {
-      write(clientSocket, buff, (stupidStringVar.size()));
+      write(clientSocket, buff, sizeof(buff));
     }
   }
-  strcpy(buff, "");
   
   close(clientSocket);
   return 0;
@@ -120,7 +117,7 @@ void* readingOut(void* arg)
 {
   int clientSocket = *(int *)arg;
   
-   //while (( k = (recv(clientSocket, buffer, sizeof(buffer), NULL))) > 0)
+  //while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   while ((k = read(clientSocket, buffer, sizeof(buffer))) > 0)
   {
     //read(clientSocket, buffer, sizeof(buffer));
@@ -132,9 +129,8 @@ void* readingOut(void* arg)
       sleep(1);
       cout<<"Exitted!!!"<<endl;
       exit(1);
-    } 
+    }
     cout<<buffer<<endl;
-    //cout<<">>";
   }
   
   
